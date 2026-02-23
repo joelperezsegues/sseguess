@@ -360,28 +360,39 @@ img{
 }
 
 /* ===== FOOTER =====*/
-.footer{
-    background-color: var(--second-color);
-    color: #fff;
-    text-align: center;
-    font-weight: var(--font-semi);
-    padding: 2rem 0;
+.footer {
+  background-color: var(--second-color); // fallback color
+  background-image: url('../img/footheader.jpeg'); // path relative to CSS file
+  background-size: cover;      // make the image cover the footer
+  background-position: center; // center the image
+  background-repeat: no-repeat;
+  color: #fff;
+  text-align: center;
+  font-weight: var(--font-semi);
+  padding: 2rem 0;
 
-    &__title{
-        font-size: 2rem;
-        margin-bottom: var(--mb-4);
-    }
-    &__social{
-        margin-bottom: var(--mb-4);
-    }
-    &__icon{
-        font-size: 1.5rem;
-        color: #fff;
-        margin: 0 var(--mb-2);
-    }
-    &__copy{
-        font-size: var(--smaller-font-size);
-    }
+  &__title {
+    font-size: 2rem;
+    margin-bottom: var(--mb-4);
+  }
+
+  &__social {
+    margin-bottom: var(--mb-4);
+    z-index: 1; // ensure social icons appear above background
+    position: relative;
+  }
+
+  &__icon {
+    font-size: 1.5rem;
+    color: #fff;
+    margin: 0 var(--mb-2);
+  }
+
+  &__copy {
+    font-size: var(--smaller-font-size);
+    z-index: 1;
+    position: relative;
+  }
 }
 
 /* ===== MEDIA QUERIES=====*/
