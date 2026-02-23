@@ -360,39 +360,14 @@ img{
 }
 
 /* ===== FOOTER =====*/
-.footer {
-  background-color: var(--second-color); /* fallback */
-  background-image: url('https://raw.githubusercontent.com/joelperezsegues/sseguess/main/assets/img/footheader.jpeg');
+
+.footer{
+  background-image: url("../img/footheader.jpeg");
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
-  color: #fff;
-  text-align: center;
-  font-weight: var(--font-semi);
-  padding: 2rem 0;
-
-  &__title {
-    font-size: 2rem;
-    margin-bottom: var(--mb-4);
-  }
-
-  &__social {
-    margin-bottom: var(--mb-4);
-    z-index: 1; 
-    position: relative;
-  }
-
-  &__icon {
-    font-size: 1.5rem;
-    color: #fff;
-    margin: 0 var(--mb-2);
-  }
-
-  &__copy {
-    font-size: var(--smaller-font-size);
-    z-index: 1;
-    position: relative;
-  }
+  padding: 6rem 0;
+  position: relative;
 }
 
 /* ===== MEDIA QUERIES=====*/
