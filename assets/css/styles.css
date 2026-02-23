@@ -344,12 +344,32 @@ img {
 
 /* ===== FOOTER =====*/
 .footer {
-  background-color: var(--second-color);
+  background-color: var(--second-color); /* fallback */
+  background-image: url("../img/footheader.jpeg");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+
   color: #fff;
   text-align: center;
   font-weight: var(--font-semi);
-  padding: 2rem 0;
+  padding: 6rem 0; /* mais altura para a imagem aparecer */
+  position: relative;
 }
+
+.footer::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.4); /* ajusta a intensidade */
+  z-index: 0;
+}
+
+.footer * {
+  position: relative;
+  z-index: 1;
+}
+
 .footer__title {
   font-size: 2rem;
   margin-bottom: var(--mb-4);
