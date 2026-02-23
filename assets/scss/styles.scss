@@ -361,10 +361,10 @@ img{
 
 /* ===== FOOTER =====*/
 .footer {
-  background-color: var(--second-color); // fallback color
-  background-image: url('../img/footheader.jpeg'); // path relative to CSS file
-  background-size: cover;      // make the image cover the footer
-  background-position: center; // center the image
+  background-color: var(--second-color); /* fallback */
+  background-image: url('https://raw.githubusercontent.com/joelperezsegues/sseguess/main/assets/img/footheader.jpeg');
+  background-size: cover;
+  background-position: center;
   background-repeat: no-repeat;
   color: #fff;
   text-align: center;
@@ -378,7 +378,7 @@ img{
 
   &__social {
     margin-bottom: var(--mb-4);
-    z-index: 1; // ensure social icons appear above background
+    z-index: 1; 
     position: relative;
   }
 
