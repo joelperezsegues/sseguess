@@ -575,15 +575,6 @@ body {
   position: relative;
 }
 
-/* 2) Overlay escuro por cima do fundo (para ler texto) */
-body::before {
-  content: "";
-  position: fixed;
-  inset: 0;
-  background: rgba(0, 0, 0, 0.55);
-  z-index: -1;
-}
-
 /* 3) Header / navbar dark */
 .l-header {
   background-color: rgba(30, 30, 30, 0.9);
