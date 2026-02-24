@@ -554,121 +554,72 @@ body {
   color: var(--first-color);
 }
 
-/* ================================
-   FINAL BACKGROUND + DARK THEME
-   (COLAR NO FIM DO styles.css)
-   ================================ */
+/* ======================================
+   CLEAN BACKGROUND + DARK TEXT VERSION
+   ====================================== */
 
-/* 1) Base: garante altura e fundo no body */
+/* Altura total */
 html, body {
   height: 100%;
 }
 
+/* Fundo com imagem */
 body {
   margin: var(--header-height) 0 0 0;
   font-family: var(--body-font);
   font-size: var(--normal-font-size);
-  color: #ffffff;
 
-  /* Fundo com imagem */
+  /* TEXTO CINZENTO ESCURO */
+  color: #2a2a2a;
+
+  /* IMAGEM DE FUNDO */
   background: url("../img/fondo.png") center / cover no-repeat fixed;
-  position: relative;
 }
 
-/* 3) Header / navbar dark */
+/* HEADER */
 .l-header {
-  background-color: rgba(30, 30, 30, 0.9);
-  box-shadow: 0 1px 4px rgba(255, 255, 255, 0.06);
+  background-color: #2a2a2a;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.08);
 }
 
+/* Navbar texto branco */
 .nav__logo,
-.nav__toggle {
-  color: #ffffff;
-}
-
-/* No desktop, os links eram escuros no template — forçamos branco */
+.nav__toggle,
 .nav__link {
   color: #ffffff !important;
 }
 
-.nav__link:hover::after,
-.active-link::after {
-  background-color: var(--first-color);
+/* Título principal */
+.home__title {
+  color: #2a2a2a;
 }
 
-/* Menu mobile */
-.nav__menu {
-  background-color: rgba(20, 20, 20, 0.95);
-}
-
-/* 4) Seções: deixam ver o fundo (vidro escuro) */
-.section {
-  background-color: rgba(30, 30, 30, 0.72);
-  backdrop-filter: blur(4px);
-  border-radius: 12px;
-}
-
-/* Para a HOME (que não tem class section), aplica um “card” leve */
-.home {
-  background-color: rgba(30, 30, 30, 0.55);
-  border-radius: 12px;
-}
-
-/* 5) Textos */
-.home__title,
-.home__social-icon,
-.about__subtitle,
-.about__text,
-.skills__subtitle,
-.skills__text,
-.contact__input {
-  color: #ffffff;
-}
-
-/* Mantém a cor de destaque */
-.home__title-color,
-.section-title {
+/* Joel azul mantém */
+.home__title-color {
   color: var(--first-color);
 }
 
-/* 6) Ícones sociais na home */
-.home__social-icon {
-  color: #ffffff;
-}
-.home__social-icon:hover {
-  color: var(--first-color);
-}
-
-/* 7) Botões */
-.button {
-  color: #ffffff;
-}
-
-/* 8) Cards / elementos com fundo */
+/* REMOVER QUALQUER CAIXA ESCURA */
+.section,
+.home,
 .skills__data,
 .work__img,
 .contact__input,
 .footer {
-  background-color: rgba(20, 20, 20, 0.85);
+  background: transparent !important;
+  backdrop-filter: none !important;
 }
 
-/* Inputs */
-.contact__input {
-  border: 1.5px solid rgba(255, 255, 255, 0.2);
-  background-color: rgba(20, 20, 20, 0.55);
+/* Ícones sociais */
+.home__social-icon {
+  color: #2a2a2a;
 }
 
-/* 9) Footer (mantém dark) */
-.footer {
-  color: #ffffff;
-}
-
-/* Se quiseres os ícones do footer com destaque */
-.footer__icon,
-.footer a {
-  color: #ffffff;
-}
-.footer__icon:hover,
-.footer a:hover {
+.home__social-icon:hover {
   color: var(--first-color);
+}
+
+/* Botão */
+.button {
+  color: #ffffff;
 }
