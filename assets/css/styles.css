@@ -342,49 +342,7 @@ img {
   margin-left: auto;
 }
 
-/* ===== FOOTER =====*/
-.footer {
-  background-color: var(--second-color); /* fallback */
-  background-image: url("../img/footheader.jpeg");
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
 
-  color: #fff;
-  text-align: center;
-  font-weight: var(--font-semi);
-  padding: 6rem 0; /* mais altura para a imagem aparecer */
-  position: relative;
-}
-
-.footer::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background: rgba(0, 0, 0, 0.4); /* ajusta a intensidade */
-  z-index: 0;
-}
-
-.footer * {
-  position: relative;
-  z-index: 1;
-}
-
-.footer__title {
-  font-size: 2rem;
-  margin-bottom: var(--mb-4);
-}
-.footer__social {
-  margin-bottom: var(--mb-4);
-}
-.footer__icon {
-  font-size: 1.5rem;
-  color: #fff;
-  margin: 0 var(--mb-2);
-}
-.footer__copy {
-  font-size: var(--smaller-font-size);
-}
 
 /* ===== MEDIA QUERIES=====*/
 @media screen and (max-width: 320px) {
@@ -512,8 +470,16 @@ img {
 }
 
 body {
-  background-color: var(--background-dark);
+  margin: var(--header-height) 0 0 0;
+  font-family: var(--body-font);
+  font-size: var(--normal-font-size);
   color: var(--second-color);
+
+  background-image: url("../img/fondo.png");
+  background-size: cover;       /* makes it fill the screen */
+  background-position: center;  /* centers it nicely */
+  background-repeat: no-repeat;
+  background-attachment: fixed; /* subtle parallax effect */
 }
 
 /* Header / Navbar */
