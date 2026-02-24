@@ -553,3 +553,131 @@ body {
 .nav__link:hover {
   color: var(--first-color);
 }
+
+/* ================================
+   FINAL BACKGROUND + DARK THEME
+   (COLAR NO FIM DO styles.css)
+   ================================ */
+
+/* 1) Base: garante altura e fundo no body */
+html, body {
+  height: 100%;
+}
+
+body {
+  margin: var(--header-height) 0 0 0;
+  font-family: var(--body-font);
+  font-size: var(--normal-font-size);
+  color: #ffffff;
+
+  /* Fundo com imagem */
+  background: url("../img/fondo.png") center / cover no-repeat fixed;
+  position: relative;
+}
+
+/* 2) Overlay escuro por cima do fundo (para ler texto) */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.55);
+  z-index: -1;
+}
+
+/* 3) Header / navbar dark */
+.l-header {
+  background-color: rgba(30, 30, 30, 0.9);
+  box-shadow: 0 1px 4px rgba(255, 255, 255, 0.06);
+}
+
+.nav__logo,
+.nav__toggle {
+  color: #ffffff;
+}
+
+/* No desktop, os links eram escuros no template — forçamos branco */
+.nav__link {
+  color: #ffffff !important;
+}
+
+.nav__link:hover::after,
+.active-link::after {
+  background-color: var(--first-color);
+}
+
+/* Menu mobile */
+.nav__menu {
+  background-color: rgba(20, 20, 20, 0.95);
+}
+
+/* 4) Seções: deixam ver o fundo (vidro escuro) */
+.section {
+  background-color: rgba(30, 30, 30, 0.72);
+  backdrop-filter: blur(4px);
+  border-radius: 12px;
+}
+
+/* Para a HOME (que não tem class section), aplica um “card” leve */
+.home {
+  background-color: rgba(30, 30, 30, 0.55);
+  border-radius: 12px;
+}
+
+/* 5) Textos */
+.home__title,
+.home__social-icon,
+.about__subtitle,
+.about__text,
+.skills__subtitle,
+.skills__text,
+.contact__input {
+  color: #ffffff;
+}
+
+/* Mantém a cor de destaque */
+.home__title-color,
+.section-title {
+  color: var(--first-color);
+}
+
+/* 6) Ícones sociais na home */
+.home__social-icon {
+  color: #ffffff;
+}
+.home__social-icon:hover {
+  color: var(--first-color);
+}
+
+/* 7) Botões */
+.button {
+  color: #ffffff;
+}
+
+/* 8) Cards / elementos com fundo */
+.skills__data,
+.work__img,
+.contact__input,
+.footer {
+  background-color: rgba(20, 20, 20, 0.85);
+}
+
+/* Inputs */
+.contact__input {
+  border: 1.5px solid rgba(255, 255, 255, 0.2);
+  background-color: rgba(20, 20, 20, 0.55);
+}
+
+/* 9) Footer (mantém dark) */
+.footer {
+  color: #ffffff;
+}
+
+/* Se quiseres os ícones do footer com destaque */
+.footer__icon,
+.footer a {
+  color: #ffffff;
+}
+.footer__icon:hover,
+.footer a:hover {
+  color: var(--first-color);
+}
