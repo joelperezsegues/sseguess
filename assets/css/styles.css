@@ -625,61 +625,71 @@ body {
 }
 
 /* =========================
-   MOBILE HOME LAYOUT (iPhone)
+   MOBILE HERO: IMAGE TOP + TEXT BOTTOM (CENTERED)
    ========================= */
-@media screen and (max-width: 576px) {
+@media screen and (max-width: 768px) {
 
-  /* dá espaço para a header fixa */
+  /* Home vira layout vertical e centrado */
   .home {
-    row-gap: 1.5rem;
-    padding: 6rem 0 2rem; /* mais respiro em cima */
+    padding: 7rem 0 2.5rem !important; /* espaço para o header fixo */
+    row-gap: 2rem !important;
+    text-align: center !important;
   }
 
-  /* força a grid a ficar em 1 coluna */
+  /* grid em 1 coluna */
   .home.bd-grid {
-    grid-template-columns: 1fr;
+    grid-template-columns: 1fr !important;
+    justify-items: center !important;
   }
 
-  /* texto sempre em cima */
+  /* IMAGEM: fica em cima e centrada */
+  .home__img {
+    position: relative !important; /* remove absolute */
+    right: auto !important;
+    bottom: auto !important;
+    width: 100% !important;
+
+    display: flex !important;
+    justify-content: center !important;
+
+    order: 1 !important;
+    margin-top: 0.5rem !important;
+  }
+
+  /* tamanho do svg/imagem */
+  .home__blob {
+    width: 260px !important;  /* ajusta: 240-300 */
+    height: auto !important;
+  }
+
+  /* TEXTO: fica por baixo */
   .home__data {
-    order: 1;
+    order: 2 !important;
+    justify-self: center !important;
   }
 
-  /* botão mais abaixo e alinhado com o texto */
+  /* título mais “hero” */
+  .home__title {
+    line-height: 1.15 !important;
+  }
+
+  /* BOTÃO centrado e mais abaixo */
   .home__data .button {
-    display: inline-block;
-    margin-top: 1.25rem;
+    margin-top: 1.25rem !important;
+    display: inline-block !important;
   }
 
-  /* ícones: em linha e com espaço, por baixo do botão */
+  /* SOCIAIS: em linha e centrados */
   .home__social {
-    order: 2;
-    flex-direction: row;
-    gap: 1rem;
-    margin-top: 1.25rem;
-    align-self: flex-start; /* alinha à esquerda */
+    order: 3 !important;
+    flex-direction: row !important;
+    justify-content: center !important;
+    gap: 1rem !important;
+    margin-top: 1.25rem !important;
   }
 
   .home__social-icon {
-    font-size: 1.6rem;
-    margin: 0; /* remove margens antigas */
-  }
-
-  /* imagem: centrada e mais abaixo */
-  .home__img {
-    order: 3;
-    position: relative;     /* tira o absolute no mobile */
-    right: auto;
-    bottom: auto;
-    width: 100%;
-    display: flex;
-    justify-content: center;
-    margin-top: 1.75rem;
-  }
-
-  /* controla tamanho do svg/imagem */
-  .home__blob {
-    width: 260px; /* ajusta se quiseres maior */
-    height: auto;
+    margin: 0 !important;
+    font-size: 1.7rem !important;
   }
 }
