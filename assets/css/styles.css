@@ -624,25 +624,25 @@ body {
   color: #ffffff;
 }
 
-
 /* =========================
-   MOBILE HERO — COMPACT VERSION
+   MOBILE HERO — FINAL (IMAGE TOP, LINKS BOTTOM)
    ========================= */
 @media screen and (max-width: 768px) {
 
-  .home {
-    padding: 4rem 0 1rem !important; /* menos espaço em cima */
-    row-gap: 0.5rem !important;
+  /* força layout em coluna e permite order */
+  .home.bd-grid {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    justify-content: flex-start !important;
     text-align: center !important;
+
+    padding: 4rem 0 1rem !important;
+    row-gap: 0.5rem !important;
     min-height: 100vh;
   }
 
-  .home.bd-grid {
-    grid-template-columns: 1fr !important;
-    justify-items: center !important;
-  }
-
-  /* IMAGEM */
+  /* IMAGEM (fica em cima) */
   .home__img {
     position: relative !important;
     right: auto !important;
@@ -650,20 +650,21 @@ body {
     width: 100% !important;
     display: flex !important;
     justify-content: center !important;
-    order: 1 !important;
 
-    margin-top: -1.5rem !important; /* sobe imagem */
-    margin-bottom: -0.5rem !important; /* aproxima do texto */
+    order: 1 !important;
+    margin-top: -1.5rem !important;
+    margin-bottom: -0.5rem !important;
   }
 
   .home__blob {
-    width: 320px !important; /* maior ainda */
+    width: 320px !important;
+    height: auto !important;
   }
 
-  /* TEXTO */
+  /* TEXTO (fica no meio) */
   .home__data {
     order: 2 !important;
-    margin-top: -0.5rem !important; /* sobe texto */
+    margin-top: -0.5rem !important;
   }
 
   .home__title {
@@ -671,15 +672,22 @@ body {
     margin-bottom: 0.25rem !important;
   }
 
+  /* BOTÃO (abaixo do texto) */
   .home__data .button {
     margin-top: 0.75rem !important;
   }
 
+  /* LINKS SOCIAIS (ficam no fim) */
   .home__social {
+    order: 4 !important;
     flex-direction: row !important;
     justify-content: center !important;
     gap: 1rem !important;
-    margin-top: 0.75rem !important;
+    margin-top: 1rem !important;
   }
 
+  .home__social-icon {
+    margin: 0 !important;
+    font-size: 1.7rem !important;
+  }
 }
