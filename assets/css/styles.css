@@ -214,7 +214,7 @@ img {
   width: 260px;
 }
 .home__blob {
-  fill: var(--first-color);
+  fill: var(#fff);
 }
 .home__blob-img {
   width: 360px;
@@ -624,72 +624,66 @@ body {
   color: #ffffff;
 }
 
+
 /* =========================
-   MOBILE HERO: IMAGE TOP + TEXT BOTTOM (CENTERED)
+   MOBILE HERO: FIT SCREEN (CENTERED)
    ========================= */
 @media screen and (max-width: 768px) {
 
-  /* Home vira layout vertical e centrado */
   .home {
-    padding: 7rem 0 2.5rem !important; /* espaço para o header fixo */
-    row-gap: 2rem !important;
+    padding: 5.25rem 0 1.5rem !important; /* menos espaço em cima */
+    row-gap: 1.25rem !important;          /* menos espaço entre blocos */
     text-align: center !important;
+    min-height: calc(100vh - var(--header-height)); /* ajuda a caber */
   }
 
-  /* grid em 1 coluna */
   .home.bd-grid {
     grid-template-columns: 1fr !important;
     justify-items: center !important;
   }
 
-  /* IMAGEM: fica em cima e centrada */
   .home__img {
-    position: relative !important; /* remove absolute */
+    position: relative !important;
     right: auto !important;
     bottom: auto !important;
     width: 100% !important;
-
     display: flex !important;
     justify-content: center !important;
-
     order: 1 !important;
-    margin-top: 0.5rem !important;
+    margin-top: 0rem !important; /* tira extra */
   }
 
-  /* tamanho do svg/imagem */
   .home__blob {
-    width: 260px !important;  /* ajusta: 240-300 */
+    width: 225px !important; /* MAIS PEQUENO para caber */
     height: auto !important;
   }
 
-  /* TEXTO: fica por baixo */
   .home__data {
     order: 2 !important;
     justify-self: center !important;
   }
 
-  /* título mais “hero” */
   .home__title {
-    line-height: 1.15 !important;
+    line-height: 1.1 !important;
+    margin-bottom: 0.25rem !important; /* compacta o título */
   }
 
-  /* BOTÃO centrado e mais abaixo */
   .home__data .button {
-    margin-top: 1.25rem !important;
+    margin-top: 0.9rem !important;
+    padding: 0.65rem 1.8rem !important; /* botão ligeiramente menor */
     display: inline-block !important;
   }
 
-  /* SOCIAIS: em linha e centrados */
   .home__social {
     order: 3 !important;
     flex-direction: row !important;
     justify-content: center !important;
-    gap: 1rem !important;
-    margin-top: 1.25rem !important;
+    gap: 0.9rem !important;
+    margin-top: 0.9rem !important;
   }
 
   .home__social-icon {
     margin: 0 !important;
-    font-size: 1.7rem !important;
+    font-size: 1.6rem !important;
   }
 }
