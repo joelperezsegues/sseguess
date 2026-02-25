@@ -657,7 +657,7 @@ body {
   }
 
   .home__blob {
-    width: 320px !important;
+    width: 280px !important;
     height: auto !important;
   }
 
@@ -671,7 +671,11 @@ body {
     line-height: 1.05 !important;
     margin-bottom: 0.25rem !important;
   }
-
+  
+  .home__img{
+    margin-bottom: 0.75rem !important;
+  }
+  
   /* BOTÃO (abaixo do texto) */
   .home__data .button {
     margin-top: 0.75rem !important;
