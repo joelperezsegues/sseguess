@@ -475,7 +475,7 @@ body {
   font-size: var(--normal-font-size);
   color: var(--second-color);
 
-  background-image: url("/sseguess/images/backgrounds/.png");
+  background-image: url("/sseguess/images/backgrounds/index.png");
   background-size: cover;       /* makes it fill the screen */
   background-position: center;  /* centers it nicely */
   background-repeat: no-repeat;
@@ -573,7 +573,7 @@ body {
   color: #2a2a2a;
 
   /* IMAGEM DE FUNDO */
-  background: url("/sseguess/images/backgrounds/.png") center / cover no-repeat fixed;
+  background: url("/sseguess/images/backgrounds/index.png") center / cover no-repeat fixed;
 }
 
 /* HEADER */
