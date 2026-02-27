@@ -12,13 +12,17 @@
 
   <!-- CSS só desta página -->
   <style>
-    /* container geral */
+    /* =========================
+      ILLUSTRATIONS — PREMIUM CAROUSEL
+      (center bigger + side smaller)
+      ========================= */
+
     .illu {
       padding-top: calc(var(--header-height) + 2.5rem);
       padding-bottom: 3rem;
     }
 
-    /* slider horizontal */
+    /* Slider horizontal */
     .illu__slider {
       display: grid;
       grid-auto-flow: column;
@@ -30,33 +34,68 @@
       scroll-snap-type: x mandatory;
       -webkit-overflow-scrolling: touch;
 
-      /* esconder scrollbar (fica clean) */
+      /* hide scrollbar */
       scrollbar-width: none;
+
+      /* premium feel */
+      scroll-behavior: smooth;
     }
+
     .illu__slider::-webkit-scrollbar { display: none; }
 
-    /* cada slide/cartão */
+    /* Fade nas laterais (tipo “premium”) */
+    .illu__slider {
+      -webkit-mask-image: linear-gradient(to right,
+        transparent 0%,
+        black 7%,
+        black 93%,
+        transparent 100%);
+              mask-image: linear-gradient(to right,
+        transparent 0%,
+        black 7%,
+        black 93%,
+        transparent 100%);
+    }
+
+    /* Cada slide/card */
     .illu__card {
       scroll-snap-align: center;
-      border-radius: 18px;
+      border-radius: 22px;
       overflow: hidden;
       position: relative;
 
-      /* frame/contorno como no print */
       border: 4px solid rgba(40, 40, 40, 0.9);
-      background: rgba(0,0,0,0.08); /* fallback */
-      box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+      background: rgba(0,0,0,0.06);
+      box-shadow: 0 12px 30px rgba(0,0,0,0.18);
+
+      /* laterais menores por defeito */
+      transform: scale(0.92);
+      opacity: 0.75;
+      transition: transform .25s ease, opacity .25s ease, box-shadow .25s ease;
     }
 
+    /* centro maior quando está focado/clicado */
+    .illu__card:focus-within,
+    .illu__card:hover {
+      transform: scale(1);
+      opacity: 1;
+      box-shadow: 0 16px 45px rgba(0,0,0,0.25);
+    }
+
+    /* A imagem em formato poster 2:3 (2000x3000) */
     .illu__card img {
       width: 100%;
-      height: 62vh;          /* “poster” vertical */
-      max-height: 520px;
-      object-fit: cover;     /* corta sem distorcer */
+      aspect-ratio: 2 / 3;
+      height: auto;
+
+      /* NÃO corta nada */
+      object-fit: contain;
+      background: rgba(255,255,255,0.92);
+
       display: block;
     }
 
-    /* label opcional em cima (se quiseres nome do projeto) */
+    /* label */
     .illu__label {
       position: absolute;
       left: 14px;
@@ -70,20 +109,35 @@
       font-size: 0.95rem;
     }
 
-    /* desktop: mostra mais “cards” */
+    /* Desktop: mais cards visíveis */
     @media screen and (min-width: 768px){
       .illu__slider{
-        grid-auto-columns: 42%;
+        grid-auto-columns: 40%;
         padding: 0 2rem 1rem;
-      }
-      .illu__card img{
-        height: 520px;
+        gap: 1.5rem;
       }
     }
 
     @media screen and (min-width: 1024px){
       .illu__slider{
-        grid-auto-columns: 34%;
+        grid-auto-columns: 32%;
+      }
+    }
+
+    /* Mobile: ainda mais “premium” com espaçamento e centro maior */
+    @media screen and (max-width: 480px){
+      .illu__slider{
+        grid-auto-columns: 88%;
+        gap: 1rem;
+      }
+      .illu__card{
+        transform: scale(0.94);
+        opacity: 0.82;
+      }
+      .illu__card:hover,
+      .illu__card:focus-within{
+        transform: scale(1);
+        opacity: 1;
       }
     }
   </style>
@@ -122,25 +176,55 @@
         <!-- Slide 1 -->
         <a class="illu__card" href="#" aria-label="Open illustration 1">
           <img src="/sseguess/images/portfolio/ilustrations/dones_d_aigua/1.PNG" alt="Illustration 1">
-          <div class="illu__label">Dones d’aigua — 01</div>
+          <div class="illu__label">Orgánica</div>
         </a>
 
         <!-- Slide 2 -->
         <a class="illu__card" href="#" aria-label="Open illustration 2">
           <img src="/sseguess/images/portfolio/ilustrations/dones_d_aigua/2.PNG" alt="Illustration 2">
-          <div class="illu__label">Dones d’aigua — 02</div>
+          <div class="illu__label">Capicua</div>
         </a>
 
         <!-- Slide 3 -->
         <a class="illu__card" href="#" aria-label="Open illustration 3">
           <img src="/sseguess/images/portfolio/ilustrations/dones_d_aigua/3.PNG" alt="Illustration 3">
-          <div class="illu__label">Dones d’aigua — 03</div>
+          <div class="illu__label">Sòlida</div>
         </a>
 
         <!-- Slide 4 -->
         <a class="illu__card" href="#" aria-label="Open illustration 4">
           <img src="/sseguess/images/portfolio/ilustrations/dones_d_aigua/4.PNG" alt="Illustration 4">
-          <div class="illu__label">Dones d’aigua — 04</div>
+          <div class="illu__label">Aquelarre</div>
+        </a>
+
+        <!-- Slide 5 -->
+        <a class="illu__card" href="#" aria-label="Open illustration 5">
+          <img src="/sseguess/images/portfolio/ilustrations/dones_d_aigua/5.PNG" alt="Illustration 5">
+          <div class="illu__label">Líquida</div>
+        </a>
+
+        <!-- Slide 6 -->
+        <a class="illu__card" href="#" aria-label="Open illustration 6">
+          <img src="/sseguess/images/portfolio/ilustrations/dones_d_aigua/6.PNG" alt="Illustration 6">
+          <div class="illu__label">Oasis</div>
+        </a>
+
+        <!-- Slide 7 -->
+        <a class="illu__card" href="#" aria-label="Open illustration 7">
+          <img src="/sseguess/images/portfolio/ilustrations/dones_d_aigua/7.PNG" alt="Illustration 7">
+          <div class="illu__label">Gasosa</div>
+        </a>
+
+        <!-- Slide 8 -->
+        <a class="illu__card" href="#" aria-label="Open illustration 8">
+          <img src="/sseguess/images/portfolio/ilustrations/dones_d_aigua/8.PNG" alt="Illustration 8">
+          <div class="illu__label">Insolubles</div>
+        </a>
+
+        <!-- Slide 9 -->
+        <a class="illu__card" href="#" aria-label="Open illustration 9">
+          <img src="/sseguess/images/portfolio/ilustrations/dones_d_aigua/9.PNG" alt="Illustration 9">
+          <div class="illu__label">Identitat Col•lectiva</div>
         </a>
 
       </div>
