@@ -171,59 +171,59 @@
       <h2 class="section-title">Illustrations</h2>
 
       <!-- SLIDER -->
-      <div class="illu__slider">
+      <div class="illu__slider" id="illuSlider">
 
         <!-- Slide 1 -->
         <a class="illu__card" href="#" aria-label="Open illustration 1">
-          <img src="/sseguess/images/portfolio/ilustrations/dones_d_aigua/1.PNG" alt="Illustration 1">
+          <img src="/sseguess/images/portfolio/ilustrations/dones_d_aigua/1_organica.PNG" alt="Illustration 1">
           <div class="illu__label">Orgánica</div>
         </a>
 
         <!-- Slide 2 -->
         <a class="illu__card" href="#" aria-label="Open illustration 2">
-          <img src="/sseguess/images/portfolio/ilustrations/dones_d_aigua/2.PNG" alt="Illustration 2">
-          <div class="illu__label">Capicua</div>
+          <img src="/sseguess/images/portfolio/ilustrations/dones_d_aigua/2_solida.PNG" alt="Illustration 2">
+          <div class="illu__label">Sòlida</div>
         </a>
 
         <!-- Slide 3 -->
         <a class="illu__card" href="#" aria-label="Open illustration 3">
-          <img src="/sseguess/images/portfolio/ilustrations/dones_d_aigua/3.PNG" alt="Illustration 3">
-          <div class="illu__label">Sòlida</div>
+          <img src="/sseguess/images/portfolio/ilustrations/dones_d_aigua/3_oasis.PNG" alt="Illustration 3">
+          <div class="illu__label">Oasis</div>
         </a>
 
         <!-- Slide 4 -->
         <a class="illu__card" href="#" aria-label="Open illustration 4">
-          <img src="/sseguess/images/portfolio/ilustrations/dones_d_aigua/4.PNG" alt="Illustration 4">
-          <div class="illu__label">Aquelarre</div>
+          <img src="/sseguess/images/portfolio/ilustrations/dones_d_aigua/4_liquida.PNG" alt="Illustration 4">
+          <div class="illu__label">Líquida</div>
         </a>
 
         <!-- Slide 5 -->
         <a class="illu__card" href="#" aria-label="Open illustration 5">
-          <img src="/sseguess/images/portfolio/ilustrations/dones_d_aigua/5.PNG" alt="Illustration 5">
-          <div class="illu__label">Líquida</div>
+          <img src="/sseguess/images/portfolio/ilustrations/dones_d_aigua/5_capicua.PNG" alt="Illustration 5">
+          <div class="illu__label">Capicua</div>
         </a>
 
         <!-- Slide 6 -->
         <a class="illu__card" href="#" aria-label="Open illustration 6">
-          <img src="/sseguess/images/portfolio/ilustrations/dones_d_aigua/6.PNG" alt="Illustration 6">
-          <div class="illu__label">Oasis</div>
+          <img src="/sseguess/images/portfolio/ilustrations/dones_d_aigua/6_gasosa.PNG" alt="Illustration 6">
+          <div class="illu__label">Gasosa</div>
         </a>
 
         <!-- Slide 7 -->
         <a class="illu__card" href="#" aria-label="Open illustration 7">
-          <img src="/sseguess/images/portfolio/ilustrations/dones_d_aigua/7.PNG" alt="Illustration 7">
-          <div class="illu__label">Gasosa</div>
+          <img src="/sseguess/images/portfolio/ilustrations/dones_d_aigua/7_aqualarre.PNG" alt="Illustration 7">
+          <div class="illu__label">Aquelarre</div>
         </a>
 
         <!-- Slide 8 -->
         <a class="illu__card" href="#" aria-label="Open illustration 8">
-          <img src="/sseguess/images/portfolio/ilustrations/dones_d_aigua/8.PNG" alt="Illustration 8">
+          <img src="/sseguess/images/portfolio/ilustrations/dones_d_aigua/8_insolubles.PNG" alt="Illustration 8">
           <div class="illu__label">Insolubles</div>
         </a>
 
         <!-- Slide 9 -->
         <a class="illu__card" href="#" aria-label="Open illustration 9">
-          <img src="/sseguess/images/portfolio/ilustrations/dones_d_aigua/9.PNG" alt="Illustration 9">
+          <img src="/sseguess/images/portfolio/ilustrations/dones_d_aigua/9_identitat.PNG" alt="Illustration 9">
           <div class="illu__label">Identitat Col•lectiva</div>
         </a>
 
@@ -233,5 +233,38 @@
   </main>
 
   <script src="/sseguess/assets/js/main.js"></script>
+
+  <script>
+    const slider = document.getElementById("illuSlider");
+
+    if(slider){
+
+      const cards = Array.from(slider.children);
+
+      // DUPLICAR slides (início e fim)
+      cards.forEach(card => {
+        const clone = card.cloneNode(true);
+        clone.classList.add("clone");
+        slider.appendChild(clone);
+      });
+
+      slider.scrollLeft = slider.scrollWidth / 2;
+
+      slider.addEventListener("scroll", () => {
+        const maxScroll = slider.scrollWidth;
+        const current = slider.scrollLeft;
+
+        if (current <= 0) {
+          slider.scrollLeft = maxScroll / 2;
+        }
+
+        if (current >= maxScroll - slider.offsetWidth) {
+          slider.scrollLeft = maxScroll / 2;
+        }
+      });
+
+    }
+  </script>
+  
 </body>
 </html>

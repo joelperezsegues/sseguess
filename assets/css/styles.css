@@ -758,62 +758,94 @@ body {
 }
 
 /* =========================
-   HERO FLOWERS LAYERING
+   HERO FLOWERS — STABLE + RESPONSIVE
    ========================= */
 
 .hero-art{
   position: relative;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  width: 100%;
+  max-width: 520px;           /* dá um “palco” consistente */
+  margin-inline: auto;
 }
 
+/* o SVG (blob) fica SEMPRE como referência */
 .hero-art .home__blob{
+  display: block;
+  width: 100%;
+  height: auto;
   position: relative;
   z-index: 2;
 }
 
+/* flores */
 .hero-flower{
   position: absolute;
-  width: 150px;
+  width: 140px;
   height: auto;
   pointer-events: none;
   user-select: none;
 }
 
-/* Flor atrás */
+/* Flor atrás (canto esquerdo) */
 .hero-flower--back{
   z-index: 1;
-  left: -40px;
-  top: 60px;
-  transform: rotate(-15deg);
+  left: -8%;
+  top: 18%;
+  transform: rotate(-16deg);
   opacity: 0.95;
 }
 
-/* Flor à frente */
+/* Flor à frente (canto direito) */
 .hero-flower--front{
   z-index: 3;
-  right: -20px;
-  top: 230px;
-  transform: rotate(20deg);
+  right: -6%;
+  top: 58%;
+  transform: rotate(18deg);
   opacity: 0.95;
 }
 
-/* MOBILE ajustes */
+/* =========================
+   MOBILE — bigger + higher
+   ========================= */
 @media screen and (max-width: 768px){
+  .hero-art{
+    max-width: 420px;
+  }
 
   .hero-flower{
-    width: 110px;
+    width: 120px;
   }
 
   .hero-flower--back{
-    left: -15px;
-    top: 40px;
+    left: -10%;
+    top: 14%;
   }
 
   .hero-flower--front{
-    right: -10px;
-    top: 190px;
+    right: -10%;
+    top: 52%;
+  }
+}
+
+/* =========================
+   DESKTOP — prevent “dropping down”
+   ========================= */
+@media screen and (min-width: 769px){
+  .hero-art{
+    max-width: 560px;
   }
 
+  .hero-flower{
+    width: 150px;
+  }
+
+  .hero-flower--back{
+    left: -12%;
+    top: 12%;
+  }
+
+  .hero-flower--front{
+    right: -10%;
+    top: 55%;
+  }
 }
