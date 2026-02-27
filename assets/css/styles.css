@@ -758,96 +758,164 @@ body {
 }
 
 /* =========================
-   HERO FLOWERS — STABLE + RESPONSIVE
+   HERO ART + FLOWERS (DESKTOP + MOBILE)
+   cola isto no FIM do CSS
    ========================= */
 
+/* garante que o hero-art não “empurra” layout */
 .hero-art{
   position: relative;
-  width: 100%;
-  max-width: 520px;           /* dá um “palco” consistente */
-  margin-inline: auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1;
 }
 
-/* o SVG (blob) fica SEMPRE como referência */
+/* o SVG fica por cima do fundo */
 .hero-art .home__blob{
-  display: block;
-  width: 100%;
-  height: auto;
   position: relative;
   z-index: 2;
+  width: 100%;
+  height: auto;
 }
 
 /* flores */
 .hero-flower{
   position: absolute;
-  width: 140px;
+  width: 150px;
   height: auto;
   pointer-events: none;
   user-select: none;
+  z-index: 3;
 }
 
-/* Flor atrás (canto esquerdo) */
+/* Flor atrás (fica atrás do blob e da foto) */
 .hero-flower--back{
   z-index: 1;
-  left: -8%;
-  top: 18%;
-  transform: rotate(-16deg);
+  left: -55px;
+  top: 95px;
+  transform: rotate(-18deg);
   opacity: 0.95;
 }
 
-/* Flor à frente (canto direito) */
+/* Flor à frente */
 .hero-flower--front{
   z-index: 3;
-  right: -6%;
-  top: 58%;
-  transform: rotate(18deg);
+  right: -35px;
+  top: 260px;
+  transform: rotate(22deg);
   opacity: 0.95;
 }
 
 /* =========================
-   MOBILE — bigger + higher
+   DESKTOP/TABLET: manter o comportamento original
+   (imagem mais à direita e mais em baixo)
+   ========================= */
+@media screen and (min-width: 769px){
+  .home__img.hero-art{
+    position: absolute;   /* como o template original */
+    right: 0;
+    bottom: 0;
+    width: 420px;         /* ajusta se quiseres (380-480) */
+    max-width: 44vw;
+  }
+}
+
+/* =========================
+   MOBILE: ficar como a 2ª imagem
+   - imagem em cima (maior)
+   - texto mais para cima
+   - links em baixo
+   - sem scroll (na maioria dos iPhones)
    ========================= */
 @media screen and (max-width: 768px){
-  .hero-art{
-    max-width: 420px;
+
+  /* layout vertical */
+  .home{
+    padding: calc(var(--header-height) + 1.25rem) 0 1rem !important;
+    row-gap: 0.75rem !important;
+    text-align: center !important;
+    min-height: calc(100vh - var(--header-height));
+    align-content: start;
   }
 
+  .home.bd-grid{
+    grid-template-columns: 1fr !important;
+    justify-items: center !important;
+  }
+
+  /* IMAGEM: vem para cima e maior */
+  .home__img.hero-art{
+    position: relative !important;
+    right: auto !important;
+    bottom: auto !important;
+    width: 100% !important;
+    order: 1 !important;
+    margin-top: -0.75rem !important;   /* sobe tudo */
+    margin-bottom: -0.25rem !important;/* cola ao texto */
+  }
+
+  .hero-art .home__blob{
+    width: min(380px, 92vw) !important; /* maior + responsivo */
+  }
+
+  /* TEXTO: sobe */
+  .home__data{
+    order: 2 !important;
+    margin-top: -0.25rem !important;
+  }
+
+  .home__title{
+    line-height: 1.05 !important;
+    margin-bottom: 0.35rem !important;
+  }
+
+  /* botão */
+  .home__data .button{
+    margin-top: 0.75rem !important;
+    display: inline-block !important;
+  }
+
+  /* LINKS: ficam em baixo */
+  .home__social{
+    order: 3 !important;
+    flex-direction: row !important;
+    justify-content: center !important;
+    gap: 1.25rem !important;
+    margin-top: 0.85rem !important;
+  }
+
+  .home__social-icon{
+    margin: 0 !important;
+    font-size: 1.8rem !important;
+  }
+
+  /* FLORES: posições mobile (mais coladas ao blob, sem estragar no desktop) */
   .hero-flower{
     width: 120px;
   }
 
   .hero-flower--back{
-    left: -10%;
-    top: 14%;
+    left: -22px;
+    top: 78px;
   }
 
   .hero-flower--front{
-    right: -10%;
-    top: 52%;
+    right: -18px;
+    top: 235px;
   }
 }
 
-/* =========================
-   DESKTOP — prevent “dropping down”
-   ========================= */
-@media screen and (min-width: 769px){
-  .hero-art{
-    max-width: 560px;
+/* iPhones pequenos: espreme mais um bocado */
+@media screen and (max-width: 390px){
+  .hero-art .home__blob{
+    width: min(350px, 92vw) !important;
   }
-
   .hero-flower{
-    width: 150px;
+    width: 105px;
   }
-
-  .hero-flower--back{
-    left: -12%;
-    top: 12%;
-  }
-
-  .hero-flower--front{
-    right: -10%;
-    top: 55%;
-  }
+  .hero-flower--back{ top: 70px; }
+  .hero-flower--front{ top: 220px; }
 }
 
 /* =========================
