@@ -57,12 +57,14 @@
 
       overflow-x: auto;
       scroll-snap-type: x mandatory;
+      scroll-padding: 1rem;
       -webkit-overflow-scrolling: touch;
       scroll-behavior: smooth;
 
       scrollbar-width: none;
       will-change: scroll-position;
     }
+
     .illu__slider::-webkit-scrollbar{ display: none; }
 
     /* Card */
@@ -270,198 +272,138 @@
   <script src="/sseguess/assets/js/main.js"></script>
 
   <!-- JS do carousel -->
-  <script>
-  (() => {
-    const viewport = document.getElementById("illuViewport");
-    const slider = document.getElementById("illuSlider");
-    const dotsWrap = document.getElementById("illuDots");
-    if (!viewport || !slider) return;
+<script>
+  const slider = document.getElementById("illuSlider");
 
-    const originalSlides = Array.from(slider.querySelectorAll(".illu__card"));
-    const originalCount = originalSlides.length;
-    if (originalCount === 0) return;
+  if (slider) {
+    // --- SETTINGS ---
+    const AUTOPLAY_MS = 6000;     // tempo entre slides (mais alto = mais calmo)
+    const CLONE_COUNT = 3;        // quantos clones nas pontas (2-3 costuma ser perfeito)
+    const JUMP_THRESHOLD = 10;    // tolerância px para detectar bordas
 
-    // clones antes e depois (infinite loop real)
-    const prependClones = originalSlides.map(s => s.cloneNode(true));
-    const appendClones  = originalSlides.map(s => s.cloneNode(true));
-    prependClones.forEach(c => { c.classList.add("is-clone"); slider.prepend(c); });
-    appendClones.forEach(c => { c.classList.add("is-clone"); slider.append(c); });
+    // melhora feel no iOS
+    slider.style.scrollBehavior = "smooth";
 
-    const allSlides = Array.from(slider.querySelectorAll(".illu__card"));
+    // pega nos cards originais
+    const originals = Array.from(slider.querySelectorAll(".illu__card"));
+    const total = originals.length;
+    const clones = Math.min(CLONE_COUNT, total);
 
-    const getSlideWidth = () => allSlides[0].getBoundingClientRect().width;
-    const getGap = () => {
-      const style = getComputedStyle(slider);
-      return parseFloat(style.gap || style.columnGap || "0") || 0;
+    // --- cria clones nas pontas (HEAD + TAIL) ---
+    const headClones = originals.slice(-clones).map(el => {
+      const c = el.cloneNode(true);
+      c.setAttribute("data-clone", "1");
+      return c;
+    });
+
+    const tailClones = originals.slice(0, clones).map(el => {
+      const c = el.cloneNode(true);
+      c.setAttribute("data-clone", "1");
+      return c;
+    });
+
+    headClones.reverse().forEach(c => slider.prepend(c));
+    tailClones.forEach(c => slider.appendChild(c));
+
+    // depois de inserir clones, recaptura lista completa
+    const allCards = Array.from(slider.querySelectorAll(".illu__card"));
+
+    // identifica o primeiro e último ORIGINAL (sem clones)
+    const firstOriginal = allCards.find(el => !el.dataset.clone);
+    const lastOriginal = [...allCards].reverse().find(el => !el.dataset.clone);
+
+    // posiciona o scroll no 1º original (evita começar nos clones)
+    const goToFirstOriginal = () => {
+      slider.style.scrollBehavior = "auto";
+      slider.scrollLeft = firstOriginal.offsetLeft;
+      slider.offsetHeight; // force reflow
+      slider.style.scrollBehavior = "smooth";
     };
 
-    const centerOn = (el, behavior = "smooth") => {
-      const sliderRect = slider.getBoundingClientRect();
-      const elRect = el.getBoundingClientRect();
-      const delta = (elRect.left + elRect.width / 2) - (sliderRect.left + sliderRect.width / 2);
-      slider.scrollBy({ left: delta, behavior });
-    };
+    // corre quando o layout já está medido
+    window.addEventListener("load", goToFirstOriginal);
+    // também corre já (caso já esteja carregado)
+    setTimeout(goToFirstOriginal, 50);
 
-    const getClosestToCenter = () => {
-      const sliderRect = slider.getBoundingClientRect();
-      const centerX = sliderRect.left + sliderRect.width / 2;
+    // --- helper: acha o card mais “centrado” ---
+    const getCenteredCardIndex = () => {
+      const centerX = slider.scrollLeft + slider.clientWidth / 2;
 
-      let best = null;
+      let bestIndex = 0;
       let bestDist = Infinity;
 
-      for (const el of allSlides) {
-        const r = el.getBoundingClientRect();
-        const x = r.left + r.width / 2;
-        const d = Math.abs(centerX - x);
-        if (d < bestDist) { bestDist = d; best = el; }
-      }
-      return best;
-    };
-
-    // dots (só originais)
-    const dots = [];
-    if (dotsWrap) {
-      dotsWrap.innerHTML = "";
-      for (let i = 0; i < originalCount; i++) {
-        const b = document.createElement("button");
-        b.type = "button";
-        b.className = "illu__dot";
-        b.setAttribute("aria-label", `Go to slide ${i + 1}`);
-        b.addEventListener("click", () => goToIndex(i));
-        dotsWrap.appendChild(b);
-        dots.push(b);
-      }
-    }
-
-    const setActive = () => {
-      const active = getClosestToCenter();
-      allSlides.forEach(s => s.classList.toggle("is-active", s === active));
-
-      if (dots.length && active) {
-        const idx = allSlides.indexOf(active);
-        const mapped = ((idx - originalCount) % originalCount + originalCount) % originalCount;
-        dots.forEach((d, i) => d.classList.toggle("is-active", i === mapped));
-      }
-    };
-
-    const fixInfinite = () => {
-      const unit = getSlideWidth() + getGap();
-      const leftBound  = unit * (originalCount - 1);
-      const rightBound = unit * (originalCount * 2 + 1);
-
-      if (slider.scrollLeft < leftBound) {
-        slider.scrollLeft += unit * originalCount;
-      } else if (slider.scrollLeft > rightBound) {
-        slider.scrollLeft -= unit * originalCount;
-      }
-    };
-
-    const premiumSnap = () => {
-      clearTimeout(premiumSnap.t);
-      premiumSnap.t = setTimeout(() => {
-        const active = getClosestToCenter();
-        if (active) centerOn(active, "smooth");
-      }, 120);
-    };
-
-    const goToIndex = (i) => {
-      // primeiro bloco “original” começa em originalCount
-      const target = allSlides[originalCount + i];
-      if (target) centerOn(target, "smooth");
-    };
-
-    // start no primeiro original
-    const startIndex = originalCount;
-    requestAnimationFrame(() => {
-      slider.scrollLeft = (getSlideWidth() + getGap()) * startIndex;
-      setActive();
-    });
-
-    // scroll handlers
-    let raf = null;
-    slider.addEventListener("scroll", () => {
-      if (raf) cancelAnimationFrame(raf);
-      raf = requestAnimationFrame(() => {
-        fixInfinite();
-        setActive();
+      allCards.forEach((card, i) => {
+        const cardCenter = card.offsetLeft + card.offsetWidth / 2;
+        const dist = Math.abs(centerX - cardCenter);
+        if (dist < bestDist) {
+          bestDist = dist;
+          bestIndex = i;
+        }
       });
-      premiumSnap();
+
+      return bestIndex;
+    };
+
+    // --- wrap infinito sem “soluço” ---
+    const wrapIfNeeded = () => {
+      const leftEdge = firstOriginal.offsetLeft;
+      const rightEdge = lastOriginal.offsetLeft;
+
+      // se foi demasiado para a esquerda (entrou nos clones do início)
+      if (slider.scrollLeft < leftEdge - JUMP_THRESHOLD) {
+        slider.style.scrollBehavior = "auto";
+        // salta para a posição equivalente nos originais (no fim)
+        slider.scrollLeft = lastOriginal.offsetLeft;
+        slider.offsetHeight;
+        slider.style.scrollBehavior = "smooth";
+      }
+
+      // se foi demasiado para a direita (entrou nos clones do fim)
+      if (slider.scrollLeft > rightEdge + JUMP_THRESHOLD) {
+        slider.style.scrollBehavior = "auto";
+        // volta ao começo
+        slider.scrollLeft = firstOriginal.offsetLeft;
+        slider.offsetHeight;
+        slider.style.scrollBehavior = "smooth";
+      }
+    };
+
+    slider.addEventListener("scroll", () => {
+      // throttlezinho leve (para não saltar agressivo)
+      window.clearTimeout(slider._wrapTimer);
+      slider._wrapTimer = window.setTimeout(wrapIfNeeded, 80);
     }, { passive: true });
 
-    // arrows
-    const prevBtn = document.querySelector(".illu__arrow--left");
-    const nextBtn = document.querySelector(".illu__arrow--right");
-    const step = (dir) => {
-      const active = getClosestToCenter();
-      if (!active) return;
-      const i = allSlides.indexOf(active);
-      const next = allSlides[i + dir];
-      if (next) centerOn(next, "smooth");
-    };
-    prevBtn?.addEventListener("click", () => step(-1));
-    nextBtn?.addEventListener("click", () => step(+1));
-
-    // keyboard
-    viewport.addEventListener("keydown", (e) => {
-      if (e.key === "ArrowLeft") step(-1);
-      if (e.key === "ArrowRight") step(+1);
-    });
-
-    // drag + pause autoplay when user interacts
-    let isDown = false;
-    let startX = 0;
-    let startLeft = 0;
-    let userInteractedAt = Date.now();
-
-    const pointerDown = (x) => {
-      isDown = true;
-      startX = x;
-      startLeft = slider.scrollLeft;
-      userInteractedAt = Date.now();
-      slider.style.scrollBehavior = "auto";
+    // --- autoplay: avança 1 card por vez, suave ---
+    let autoplayTimer = null;
+    const startAutoplay = () => {
+      stopAutoplay();
+      autoplayTimer = setInterval(() => {
+        const i = getCenteredCardIndex();
+        const next = allCards[i + 1] || allCards[0];
+        slider.scrollTo({ left: next.offsetLeft, behavior: "smooth" });
+      }, AUTOPLAY_MS);
     };
 
-    const pointerMove = (x) => {
-      if (!isDown) return;
-      const walk = (startX - x) * 1.1;
-      slider.scrollLeft = startLeft + walk;
-      userInteractedAt = Date.now();
+    const stopAutoplay = () => {
+      if (autoplayTimer) clearInterval(autoplayTimer);
+      autoplayTimer = null;
     };
 
-    const pointerUp = () => {
-      if (!isDown) return;
-      isDown = false;
-      slider.style.scrollBehavior = "smooth";
-      premiumSnap();
-    };
+    // pausa quando o user interage (evita movimentos bruscos)
+    slider.addEventListener("pointerenter", stopAutoplay);
+    slider.addEventListener("pointerleave", startAutoplay);
 
-    slider.addEventListener("mousedown", (e) => pointerDown(e.pageX));
-    window.addEventListener("mousemove", (e) => pointerMove(e.pageX));
-    window.addEventListener("mouseup", pointerUp);
+    slider.addEventListener("touchstart", stopAutoplay, { passive: true });
+    slider.addEventListener("touchend", () => {
+      // espera um bocadinho antes de retomar (para não “brigar” com o swipe)
+      setTimeout(startAutoplay, 800);
+    }, { passive: true });
 
-    slider.addEventListener("touchstart", (e) => pointerDown(e.touches[0].pageX), { passive: true });
-    slider.addEventListener("touchmove", (e) => pointerMove(e.touches[0].pageX), { passive: true });
-    slider.addEventListener("touchend", pointerUp);
-
-    // autoplay
-    let autoplay = true;
-    const autoplayTick = () => {
-      if (!autoplay) return;
-      const now = Date.now();
-      const recentlyInteracted = (now - userInteractedAt) < 2500;
-      if (!recentlyInteracted && !isDown) step(+1);
-      setTimeout(autoplayTick, 4200);
-    };
-    autoplayTick();
-
-    document.addEventListener("visibilitychange", () => {
-      autoplay = !document.hidden;
-    });
-
-    // initial state
-    setActive();
-  })();
-  </script>
+    // arranca
+    startAutoplay();
+  }
+</script>
 
 </body>
 </html>
