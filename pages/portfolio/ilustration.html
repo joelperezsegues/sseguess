@@ -4,57 +4,150 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
+  <!-- Usa o teu CSS (mesmo fundo do site) -->
   <link rel="stylesheet" href="/sseguess/assets/css/styles.css" />
   <link href="https://cdn.jsdelivr.net/npm/boxicons@2.0.5/css/boxicons.min.css" rel="stylesheet">
 
-  <title>Portfolio — Joel</title>
+  <title>Illustrations — Joel</title>
+
+  <!-- CSS só desta página -->
+  <style>
+    /* container geral */
+    .illu {
+      padding-top: calc(var(--header-height) + 2.5rem);
+      padding-bottom: 3rem;
+    }
+
+    /* slider horizontal */
+    .illu__slider {
+      display: grid;
+      grid-auto-flow: column;
+      grid-auto-columns: 82%;
+      gap: 1.25rem;
+
+      overflow-x: auto;
+      padding: 0 1rem 1rem;
+      scroll-snap-type: x mandatory;
+      -webkit-overflow-scrolling: touch;
+
+      /* esconder scrollbar (fica clean) */
+      scrollbar-width: none;
+    }
+    .illu__slider::-webkit-scrollbar { display: none; }
+
+    /* cada slide/cartão */
+    .illu__card {
+      scroll-snap-align: center;
+      border-radius: 18px;
+      overflow: hidden;
+      position: relative;
+
+      /* frame/contorno como no print */
+      border: 4px solid rgba(40, 40, 40, 0.9);
+      background: rgba(0,0,0,0.08); /* fallback */
+      box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+    }
+
+    .illu__card img {
+      width: 100%;
+      height: 62vh;          /* “poster” vertical */
+      max-height: 520px;
+      object-fit: cover;     /* corta sem distorcer */
+      display: block;
+    }
+
+    /* label opcional em cima (se quiseres nome do projeto) */
+    .illu__label {
+      position: absolute;
+      left: 14px;
+      bottom: 14px;
+      padding: 10px 12px;
+      border-radius: 12px;
+      background: rgba(0,0,0,0.45);
+      color: #fff;
+      font-weight: 600;
+      backdrop-filter: blur(6px);
+      font-size: 0.95rem;
+    }
+
+    /* desktop: mostra mais “cards” */
+    @media screen and (min-width: 768px){
+      .illu__slider{
+        grid-auto-columns: 42%;
+        padding: 0 2rem 1rem;
+      }
+      .illu__card img{
+        height: 520px;
+      }
+    }
+
+    @media screen and (min-width: 1024px){
+      .illu__slider{
+        grid-auto-columns: 34%;
+      }
+    }
+  </style>
 </head>
+
 <body>
 
-<header class="l-header">
-  <nav class="nav bd-grid">
-    <a href="index.html" class="nav__logo">JOEL PÉREZ SEGUÉS</a>
+  <!-- HEADER igual -->
+  <header class="l-header">
+    <nav class="nav bd-grid">
+      <a href="/sseguess/index.html" class="nav__logo">JOEL PÉREZ SEGUÉS</a>
 
-    <div class="nav__menu" id="nav-menu">
-      <ul class="nav__list">
-        <li class="nav__item"><a href="/sseguess/index.html" class="nav__link">Home</a></li>
-        <li class="nav__item"><a href="/sseguess/pages/about.html" class="nav__link">About</a></li>
-        <li class="nav__item"><a href="/sseguess/pages/portfolio.html" class="nav__link active-link">Portfolio</a></li>
-      </ul>
-    </div>
+      <div class="nav__menu" id="nav-menu">
+        <ul class="nav__list">
+          <li class="nav__item"><a href="/sseguess/index.html" class="nav__link">Home</a></li>
+          <li class="nav__item"><a href="/sseguess/pages/about.html" class="nav__link">About</a></li>
+          <li class="nav__item"><a href="/sseguess/pages/portfolio.html" class="nav__link">Portfolio</a></li>
+          <li class="nav__item"><a href="/sseguess/pages/illustrations.html" class="nav__link active-link">Illustrations</a></li>
+        </ul>
+      </div>
 
-    <div class="nav__toggle" id="nav-toggle">
-      <i class="bx bx-menu"></i>
-    </div>
-  </nav>
-</header>
+      <div class="nav__toggle" id="nav-toggle">
+        <i class="bx bx-menu"></i>
+      </div>
+    </nav>
+  </header>
 
-<main class="l-main">
-  <section class="work section">
-    <h2 class="section-title">Portfolio</h2>
+  <main class="l-main illu">
 
-    <div class="portfolio__container">
-  
-      <a href="/sseguess/portfolio/ilustration.html" class="portfolio__card">
-        <img src="/sseguess/images/portfolio/background.jpeg" alt="Ilustrations">
-        <div class="portfolio__overlay">
-          <h3>Project One</h3>
-        </div>
-      </a>
+    <section class="section">
+      <h2 class="section-title">Illustrations</h2>
 
-      <a href="/sseguess/portfolio/video_emotion_graphics.html" class="portfolio__card">
-        <img src="/sseguess/images/portfolio/background.jpg" alt="Video Emotion Graphics">
-        <div class="portfolio__overlay">
-          <h3>Project Two</h3>
-        </div>
-      </a>
+      <!-- SLIDER -->
+      <div class="illu__slider">
 
-    </div>
-  </section>
-</main>
+        <!-- Slide 1 -->
+        <a class="illu__card" href="#" aria-label="Open illustration 1">
+          <img src="/sseguess/images/portfolio/ilustrations/dones_d_aigua/1.PNG" alt="Illustration 1">
+          <div class="illu__label">Dones d’aigua — 01</div>
+        </a>
 
+        <!-- Slide 2 -->
+        <a class="illu__card" href="#" aria-label="Open illustration 2">
+          <img src="/sseguess/images/portfolio/ilustrations/dones_d_aigua/2.PNG" alt="Illustration 2">
+          <div class="illu__label">Dones d’aigua — 02</div>
+        </a>
 
+        <!-- Slide 3 -->
+        <a class="illu__card" href="#" aria-label="Open illustration 3">
+          <img src="/sseguess/images/portfolio/ilustrations/dones_d_aigua/3.PNG" alt="Illustration 3">
+          <div class="illu__label">Dones d’aigua — 03</div>
+        </a>
 
-<script src="/sseguess/assets/js/main.js"></script>
+        <!-- Slide 4 -->
+        <a class="illu__card" href="#" aria-label="Open illustration 4">
+          <img src="/sseguess/images/portfolio/ilustrations/dones_d_aigua/4.PNG" alt="Illustration 4">
+          <div class="illu__label">Dones d’aigua — 04</div>
+        </a>
+
+      </div>
+    </section>
+
+  </main>
+
+  <script src="/sseguess/assets/js/main.js"></script>
 </body>
 </html>
