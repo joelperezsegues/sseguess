@@ -736,3 +736,54 @@ img{ max-width: 100%; height: auto; display: block; }
 @media screen and (min-width: 1024px){
   .illu__card{ flex-basis: 34%; }
 }
+
+/* =========================
+   MOBILE HERO — TUNING (iPhone)
+   ========================= */
+@media screen and (max-width: 768px){
+
+  /* usa viewport dinâmica do iOS (evita jumps com a barra do Safari) */
+  .home.bd-grid{
+    min-height: calc(100dvh - var(--header-height));
+    padding-top: calc(var(--header-height) + 0.75rem);
+    padding-bottom: 0.75rem;
+    row-gap: 0.5rem;
+  }
+
+  /* blob + foto: ligeiramente menor para não dominar */
+  .hero-art .home__blob{
+    width: min(320px, 88vw);
+  }
+
+  /* puxa a arte um bocadinho para cima */
+  .home__img,
+  .home__img.hero-art{
+    margin-top: -1.1rem;
+    margin-bottom: -0.4rem;
+  }
+
+  /* texto um pouco mais compacto */
+  .home__title{
+    font-size: clamp(1.6rem, 6vw, 2.15rem);
+    margin-bottom: 0.25rem;
+  }
+
+  /* botão menos alto/largo (fica mais “design”) */
+  .button{
+    padding: 0.7rem 2rem;
+  }
+
+  /* socials: sobe um pouco e aumenta ligeiramente */
+  .home__social{
+    margin-top: 0.6rem;
+    gap: 1.1rem;
+  }
+  .home__social-icon{
+    font-size: 1.9rem;
+  }
+
+  /* flores: um toque mais pequenas no mobile */
+  .hero-flower{ width: 105px; }
+  .hero-flower--back{ top: 68px; }
+  .hero-flower--front{ top: 210px; }
+}

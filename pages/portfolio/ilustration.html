@@ -273,136 +273,170 @@
 
   <!-- JS do carousel -->
 <script>
-  const slider = document.getElementById("illuSlider");
+  document.addEventListener("DOMContentLoaded", () => {
 
-  if (slider) {
-    // --- SETTINGS ---
-    const AUTOPLAY_MS = 6000;     // tempo entre slides (mais alto = mais calmo)
-    const CLONE_COUNT = 3;        // quantos clones nas pontas (2-3 costuma ser perfeito)
-    const JUMP_THRESHOLD = 10;    // tolerância px para detectar bordas
+    const slider = document.getElementById("illuSlider");
+    const prevBtn = document.querySelector(".illu__arrow--left");
+    const nextBtn = document.querySelector(".illu__arrow--right");
+    const dotsContainer = document.getElementById("illuDots");
 
-    // melhora feel no iOS
+    if (!slider) return;
+
+    const AUTOPLAY_DELAY = 6500;
+    const RESUME_DELAY = 1200;
+    const CLONES = 2;
+
     slider.style.scrollBehavior = "smooth";
 
-    // pega nos cards originais
-    const originals = Array.from(slider.querySelectorAll(".illu__card"));
-    const total = originals.length;
-    const clones = Math.min(CLONE_COUNT, total);
+    let cards = Array.from(slider.querySelectorAll(".illu__card"));
+    const total = cards.length;
 
-    // --- cria clones nas pontas (HEAD + TAIL) ---
-    const headClones = originals.slice(-clones).map(el => {
-      const c = el.cloneNode(true);
-      c.setAttribute("data-clone", "1");
-      return c;
+    // index original
+    cards.forEach((card, i) => {
+      card.dataset.index = i;
     });
 
-    const tailClones = originals.slice(0, clones).map(el => {
-      const c = el.cloneNode(true);
-      c.setAttribute("data-clone", "1");
-      return c;
+    // criar clones (inicio + fim)
+    const headClones = cards.slice(-CLONES).map(c => {
+      const clone = c.cloneNode(true);
+      clone.dataset.clone = "true";
+      clone.dataset.index = c.dataset.index;
+      return clone;
+    });
+
+    const tailClones = cards.slice(0, CLONES).map(c => {
+      const clone = c.cloneNode(true);
+      clone.dataset.clone = "true";
+      clone.dataset.index = c.dataset.index;
+      return clone;
     });
 
     headClones.reverse().forEach(c => slider.prepend(c));
     tailClones.forEach(c => slider.appendChild(c));
 
-    // depois de inserir clones, recaptura lista completa
-    const allCards = Array.from(slider.querySelectorAll(".illu__card"));
+    cards = Array.from(slider.querySelectorAll(".illu__card"));
+    const originals = cards.filter(c => !c.dataset.clone);
 
-    // identifica o primeiro e último ORIGINAL (sem clones)
-    const firstOriginal = allCards.find(el => !el.dataset.clone);
-    const lastOriginal = [...allCards].reverse().find(el => !el.dataset.clone);
-
-    // posiciona o scroll no 1º original (evita começar nos clones)
-    const goToFirstOriginal = () => {
+    function goToStart() {
       slider.style.scrollBehavior = "auto";
-      slider.scrollLeft = firstOriginal.offsetLeft;
-      slider.offsetHeight; // force reflow
+      slider.scrollLeft = originals[0].offsetLeft;
+      slider.offsetHeight;
       slider.style.scrollBehavior = "smooth";
-    };
+    }
 
-    // corre quando o layout já está medido
-    window.addEventListener("load", goToFirstOriginal);
-    // também corre já (caso já esteja carregado)
-    setTimeout(goToFirstOriginal, 50);
+    goToStart();
 
-    // --- helper: acha o card mais “centrado” ---
-    const getCenteredCardIndex = () => {
-      const centerX = slider.scrollLeft + slider.clientWidth / 2;
+    // DOTS
+    dotsContainer.innerHTML = "";
+    const dots = [];
 
-      let bestIndex = 0;
-      let bestDist = Infinity;
+    for (let i = 0; i < total; i++) {
+      const dot = document.createElement("div");
+      dot.className = "illu__dot";
+      dot.addEventListener("click", () => {
+        stopAutoplay();
+        scrollToIndex(i);
+        setTimeout(startAutoplay, RESUME_DELAY);
+      });
+      dotsContainer.appendChild(dot);
+      dots.push(dot);
+    }
 
-      allCards.forEach((card, i) => {
+    function getCenteredCard() {
+      const center = slider.scrollLeft + slider.clientWidth / 2;
+      let closest = cards[0];
+      let minDist = Infinity;
+
+      cards.forEach(card => {
         const cardCenter = card.offsetLeft + card.offsetWidth / 2;
-        const dist = Math.abs(centerX - cardCenter);
-        if (dist < bestDist) {
-          bestDist = dist;
-          bestIndex = i;
+        const dist = Math.abs(center - cardCenter);
+        if (dist < minDist) {
+          minDist = dist;
+          closest = card;
         }
       });
 
-      return bestIndex;
-    };
+      return closest;
+    }
 
-    // --- wrap infinito sem “soluço” ---
-    const wrapIfNeeded = () => {
-      const leftEdge = firstOriginal.offsetLeft;
-      const rightEdge = lastOriginal.offsetLeft;
+    function updateActive() {
+      const centered = getCenteredCard();
+      const index = parseInt(centered.dataset.index);
 
-      // se foi demasiado para a esquerda (entrou nos clones do início)
-      if (slider.scrollLeft < leftEdge - JUMP_THRESHOLD) {
+      cards.forEach(c => c.classList.remove("is-active"));
+      centered.classList.add("is-active");
+
+      dots.forEach(d => d.classList.remove("is-active"));
+      if (dots[index]) dots[index].classList.add("is-active");
+
+      // se for clone → reposicionar invisível
+      if (centered.dataset.clone) {
+        const real = originals.find(c => c.dataset.index === centered.dataset.index);
         slider.style.scrollBehavior = "auto";
-        // salta para a posição equivalente nos originais (no fim)
-        slider.scrollLeft = lastOriginal.offsetLeft;
+        slider.scrollLeft = real.offsetLeft;
         slider.offsetHeight;
         slider.style.scrollBehavior = "smooth";
       }
+    }
 
-      // se foi demasiado para a direita (entrou nos clones do fim)
-      if (slider.scrollLeft > rightEdge + JUMP_THRESHOLD) {
-        slider.style.scrollBehavior = "auto";
-        // volta ao começo
-        slider.scrollLeft = firstOriginal.offsetLeft;
-        slider.offsetHeight;
-        slider.style.scrollBehavior = "smooth";
-      }
-    };
+    function scrollToIndex(i) {
+      const target = originals[i];
+      slider.scrollTo({ left: target.offsetLeft, behavior: "smooth" });
+    }
+
+    function next() {
+      const centered = getCenteredCard();
+      const idx = cards.indexOf(centered);
+      const nextCard = cards[idx + 1] || cards[0];
+      slider.scrollTo({ left: nextCard.offsetLeft, behavior: "smooth" });
+    }
+
+    function prev() {
+      const centered = getCenteredCard();
+      const idx = cards.indexOf(centered);
+      const prevCard = cards[idx - 1] || cards[cards.length - 1];
+      slider.scrollTo({ left: prevCard.offsetLeft, behavior: "smooth" });
+    }
 
     slider.addEventListener("scroll", () => {
-      // throttlezinho leve (para não saltar agressivo)
-      window.clearTimeout(slider._wrapTimer);
-      slider._wrapTimer = window.setTimeout(wrapIfNeeded, 80);
+      clearTimeout(slider._scrollTimer);
+      slider._scrollTimer = setTimeout(updateActive, 80);
     }, { passive: true });
 
-    // --- autoplay: avança 1 card por vez, suave ---
-    let autoplayTimer = null;
-    const startAutoplay = () => {
+    prevBtn.addEventListener("click", () => {
       stopAutoplay();
-      autoplayTimer = setInterval(() => {
-        const i = getCenteredCardIndex();
-        const next = allCards[i + 1] || allCards[0];
-        slider.scrollTo({ left: next.offsetLeft, behavior: "smooth" });
-      }, AUTOPLAY_MS);
-    };
+      prev();
+      setTimeout(startAutoplay, RESUME_DELAY);
+    });
 
-    const stopAutoplay = () => {
-      if (autoplayTimer) clearInterval(autoplayTimer);
-      autoplayTimer = null;
-    };
+    nextBtn.addEventListener("click", () => {
+      stopAutoplay();
+      next();
+      setTimeout(startAutoplay, RESUME_DELAY);
+    });
 
-    // pausa quando o user interage (evita movimentos bruscos)
-    slider.addEventListener("pointerenter", stopAutoplay);
-    slider.addEventListener("pointerleave", startAutoplay);
+    let autoplay = null;
+
+    function startAutoplay() {
+      stopAutoplay();
+      autoplay = setInterval(() => {
+        next();
+      }, AUTOPLAY_DELAY);
+    }
+
+    function stopAutoplay() {
+      if (autoplay) clearInterval(autoplay);
+    }
 
     slider.addEventListener("touchstart", stopAutoplay, { passive: true });
     slider.addEventListener("touchend", () => {
-      // espera um bocadinho antes de retomar (para não “brigar” com o swipe)
-      setTimeout(startAutoplay, 800);
+      setTimeout(startAutoplay, RESUME_DELAY);
     }, { passive: true });
 
-    // arranca
+    updateActive();
     startAutoplay();
-  }
+
+  });
 </script>
 
 </body>
