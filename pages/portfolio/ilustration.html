@@ -13,8 +13,8 @@
   <!-- CSS só desta página -->
   <style>
     /* =========================
-      ILLUSTRATIONS — PREMIUM CAROUSEL
-      (center bigger + side smaller)
+      ILLUSTRATIONS — INSANE PREMIUM CAROUSEL
+      (center bigger + side smaller + infinite loop + autoplay)
       ========================= */
 
     .illu {
@@ -22,29 +22,22 @@
       padding-bottom: 3rem;
     }
 
-    /* Slider horizontal */
-    .illu__slider {
-      display: grid;
-      grid-auto-flow: column;
-      grid-auto-columns: 82%;
-      gap: 1.25rem;
-
-      overflow-x: auto;
-      padding: 0 1rem 1rem;
-      scroll-snap-type: x mandatory;
-      -webkit-overflow-scrolling: touch;
-
-      /* hide scrollbar */
-      scrollbar-width: none;
-
-      /* premium feel */
-      scroll-behavior: smooth;
+    .illu__wrap{
+      position: relative;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 1rem;
     }
 
-    .illu__slider::-webkit-scrollbar { display: none; }
+    /* viewport para esconder overflow e ficar “premium” */
+    .illu__viewport{
+      overflow: hidden;
+      border-radius: 28px;
+      outline: none;
+    }
 
-    /* Fade nas laterais (tipo “premium”) */
-    .illu__slider {
+    /* fade nas laterais */
+    .illu__viewport{
       -webkit-mask-image: linear-gradient(to right,
         transparent 0%,
         black 7%,
@@ -57,9 +50,26 @@
         transparent 100%);
     }
 
-    /* Cada slide/card */
-    .illu__card {
+    .illu__slider{
+      display: flex;
+      gap: 1.25rem;
+      padding: 1.25rem 0;
+
+      overflow-x: auto;
+      scroll-snap-type: x mandatory;
+      -webkit-overflow-scrolling: touch;
+      scroll-behavior: smooth;
+
+      scrollbar-width: none;
+      will-change: scroll-position;
+    }
+    .illu__slider::-webkit-scrollbar{ display: none; }
+
+    /* Card */
+    .illu__card{
+      flex: 0 0 82%;
       scroll-snap-align: center;
+
       border-radius: 22px;
       overflow: hidden;
       position: relative;
@@ -68,35 +78,33 @@
       background: rgba(0,0,0,0.06);
       box-shadow: 0 12px 30px rgba(0,0,0,0.18);
 
-      /* laterais menores por defeito */
-      transform: scale(0.92);
+      /* default menor */
+      transform: scale(0.90);
       opacity: 0.75;
-      transition: transform .25s ease, opacity .25s ease, box-shadow .25s ease;
+      transition: transform .22s ease, opacity .22s ease, box-shadow .22s ease, filter .22s ease;
+      filter: saturate(.95) contrast(.98);
     }
 
-    /* centro maior quando está focado/clicado */
-    .illu__card:focus-within,
-    .illu__card:hover {
+    /* ativo (centro) */
+    .illu__card.is-active{
       transform: scale(1);
       opacity: 1;
-      box-shadow: 0 16px 45px rgba(0,0,0,0.25);
+      box-shadow: 0 18px 55px rgba(0,0,0,0.28);
+      filter: saturate(1) contrast(1);
     }
 
-    /* A imagem em formato poster 2:3 (2000x3000) */
-    .illu__card img {
+    /* Imagens 2000x3000 => ratio 2/3 */
+    .illu__card img{
       width: 100%;
       aspect-ratio: 2 / 3;
       height: auto;
-
-      /* NÃO corta nada */
       object-fit: contain;
       background: rgba(255,255,255,0.92);
-
       display: block;
     }
 
     /* label */
-    .illu__label {
+    .illu__label{
       position: absolute;
       left: 14px;
       bottom: 14px;
@@ -105,40 +113,68 @@
       background: rgba(0,0,0,0.45);
       color: #fff;
       font-weight: 600;
-      backdrop-filter: blur(6px);
+      backdrop-filter: blur(8px);
       font-size: 0.95rem;
     }
 
-    /* Desktop: mais cards visíveis */
+    /* arrows */
+    .illu__arrow{
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      z-index: 5;
+
+      width: 46px;
+      height: 46px;
+      border-radius: 999px;
+      border: 2px solid rgba(40,40,40,.7);
+      background: rgba(255,255,255,.75);
+      backdrop-filter: blur(8px);
+
+      font-size: 28px;
+      line-height: 40px;
+      cursor: pointer;
+      user-select: none;
+    }
+    .illu__arrow--left{ left: .25rem; }
+    .illu__arrow--right{ right: .25rem; }
+    .illu__arrow:active{ transform: translateY(-50%) scale(.98); }
+
+    /* dots */
+    .illu__dots{
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      margin-top: 14px;
+    }
+    .illu__dot{
+      width: 10px;
+      height: 10px;
+      border-radius: 999px;
+      border: 2px solid rgba(40,40,40,.6);
+      background: rgba(255,255,255,.5);
+      cursor: pointer;
+      transition: transform .15s ease, background .15s ease;
+    }
+    .illu__dot.is-active{
+      transform: scale(1.25);
+      background: rgba(40,40,40,.75);
+    }
+
+    /* Desktop */
     @media screen and (min-width: 768px){
-      .illu__slider{
-        grid-auto-columns: 40%;
-        padding: 0 2rem 1rem;
-        gap: 1.5rem;
-      }
+      .illu__card{ flex-basis: 40%; }
+      .illu__wrap{ padding: 0 2rem; }
+      .illu__slider{ gap: 1.5rem; }
     }
-
     @media screen and (min-width: 1024px){
-      .illu__slider{
-        grid-auto-columns: 32%;
-      }
+      .illu__card{ flex-basis: 32%; }
     }
 
-    /* Mobile: ainda mais “premium” com espaçamento e centro maior */
+    /* Mobile micro tweaks */
     @media screen and (max-width: 480px){
-      .illu__slider{
-        grid-auto-columns: 88%;
-        gap: 1rem;
-      }
-      .illu__card{
-        transform: scale(0.94);
-        opacity: 0.82;
-      }
-      .illu__card:hover,
-      .illu__card:focus-within{
-        transform: scale(1);
-        opacity: 1;
-      }
+      .illu__card{ flex-basis: 88%; }
+      .illu__slider{ gap: 1rem; }
     }
   </style>
 </head>
@@ -166,105 +202,266 @@
   </header>
 
   <main class="l-main illu">
-
     <section class="section">
       <h2 class="section-title">Illustrations</h2>
 
-      <!-- SLIDER -->
-      <div class="illu__slider" id="illuSlider">
+      <div class="illu__wrap">
+        <button class="illu__arrow illu__arrow--left" type="button" aria-label="Previous">‹</button>
 
-        <!-- Slide 1 -->
-        <a class="illu__card" href="#" aria-label="Open illustration 1">
-          <img src="/sseguess/images/portfolio/ilustrations/dones_d_aigua/1_organica.PNG" alt="Illustration 1">
-          <div class="illu__label">Orgánica</div>
-        </a>
+        <div class="illu__viewport" id="illuViewport" tabindex="0" aria-label="Illustrations carousel">
+          <div class="illu__slider" id="illuSlider">
 
-        <!-- Slide 2 -->
-        <a class="illu__card" href="#" aria-label="Open illustration 2">
-          <img src="/sseguess/images/portfolio/ilustrations/dones_d_aigua/2_solida.PNG" alt="Illustration 2">
-          <div class="illu__label">Sòlida</div>
-        </a>
+            <!-- Slides (os teus paths reais) -->
+            <a class="illu__card" href="#" aria-label="Open Orgánica">
+              <img src="/sseguess/images/portfolio/ilustrations/dones_d_aigua/1_organica.PNG" alt="Orgánica">
+              <div class="illu__label">Orgánica</div>
+            </a>
 
-        <!-- Slide 3 -->
-        <a class="illu__card" href="#" aria-label="Open illustration 3">
-          <img src="/sseguess/images/portfolio/ilustrations/dones_d_aigua/3_oasis.PNG" alt="Illustration 3">
-          <div class="illu__label">Oasis</div>
-        </a>
+            <a class="illu__card" href="#" aria-label="Open Sòlida">
+              <img src="/sseguess/images/portfolio/ilustrations/dones_d_aigua/2_solida.PNG" alt="Sòlida">
+              <div class="illu__label">Sòlida</div>
+            </a>
 
-        <!-- Slide 4 -->
-        <a class="illu__card" href="#" aria-label="Open illustration 4">
-          <img src="/sseguess/images/portfolio/ilustrations/dones_d_aigua/4_liquida.PNG" alt="Illustration 4">
-          <div class="illu__label">Líquida</div>
-        </a>
+            <a class="illu__card" href="#" aria-label="Open Oasis">
+              <img src="/sseguess/images/portfolio/ilustrations/dones_d_aigua/3_oasis.PNG" alt="Oasis">
+              <div class="illu__label">Oasis</div>
+            </a>
 
-        <!-- Slide 5 -->
-        <a class="illu__card" href="#" aria-label="Open illustration 5">
-          <img src="/sseguess/images/portfolio/ilustrations/dones_d_aigua/5_capicua.PNG" alt="Illustration 5">
-          <div class="illu__label">Capicua</div>
-        </a>
+            <a class="illu__card" href="#" aria-label="Open Líquida">
+              <img src="/sseguess/images/portfolio/ilustrations/dones_d_aigua/4_liquida.PNG" alt="Líquida">
+              <div class="illu__label">Líquida</div>
+            </a>
 
-        <!-- Slide 6 -->
-        <a class="illu__card" href="#" aria-label="Open illustration 6">
-          <img src="/sseguess/images/portfolio/ilustrations/dones_d_aigua/6_gasosa.PNG" alt="Illustration 6">
-          <div class="illu__label">Gasosa</div>
-        </a>
+            <a class="illu__card" href="#" aria-label="Open Capicua">
+              <img src="/sseguess/images/portfolio/ilustrations/dones_d_aigua/5_capicua.PNG" alt="Capicua">
+              <div class="illu__label">Capicua</div>
+            </a>
 
-        <!-- Slide 7 -->
-        <a class="illu__card" href="#" aria-label="Open illustration 7">
-          <img src="/sseguess/images/portfolio/ilustrations/dones_d_aigua/7_aqualarre.PNG" alt="Illustration 7">
-          <div class="illu__label">Aquelarre</div>
-        </a>
+            <a class="illu__card" href="#" aria-label="Open Gasosa">
+              <img src="/sseguess/images/portfolio/ilustrations/dones_d_aigua/6_gasosa.PNG" alt="Gasosa">
+              <div class="illu__label">Gasosa</div>
+            </a>
 
-        <!-- Slide 8 -->
-        <a class="illu__card" href="#" aria-label="Open illustration 8">
-          <img src="/sseguess/images/portfolio/ilustrations/dones_d_aigua/8_insolubles.PNG" alt="Illustration 8">
-          <div class="illu__label">Insolubles</div>
-        </a>
+            <a class="illu__card" href="#" aria-label="Open Aquelarre">
+              <img src="/sseguess/images/portfolio/ilustrations/dones_d_aigua/7_aqualarre.PNG" alt="Aquelarre">
+              <div class="illu__label">Aquelarre</div>
+            </a>
 
-        <!-- Slide 9 -->
-        <a class="illu__card" href="#" aria-label="Open illustration 9">
-          <img src="/sseguess/images/portfolio/ilustrations/dones_d_aigua/9_identitat.PNG" alt="Illustration 9">
-          <div class="illu__label">Identitat Col•lectiva</div>
-        </a>
+            <a class="illu__card" href="#" aria-label="Open Insolubles">
+              <img src="/sseguess/images/portfolio/ilustrations/dones_d_aigua/8_insolubles.PNG" alt="Insolubles">
+              <div class="illu__label">Insolubles</div>
+            </a>
 
+            <a class="illu__card" href="#" aria-label="Open Identitat Col·lectiva">
+              <img src="/sseguess/images/portfolio/ilustrations/dones_d_aigua/9_identitat.PNG" alt="Identitat Col·lectiva">
+              <div class="illu__label">Identitat Col•lectiva</div>
+            </a>
+
+          </div>
+        </div>
+
+        <button class="illu__arrow illu__arrow--right" type="button" aria-label="Next">›</button>
       </div>
-    </section>
 
+      <div class="illu__dots" id="illuDots" aria-label="Carousel pagination"></div>
+    </section>
   </main>
 
   <script src="/sseguess/assets/js/main.js"></script>
 
+  <!-- JS do carousel -->
   <script>
+  (() => {
+    const viewport = document.getElementById("illuViewport");
     const slider = document.getElementById("illuSlider");
+    const dotsWrap = document.getElementById("illuDots");
+    if (!viewport || !slider) return;
 
-    if(slider){
+    const originalSlides = Array.from(slider.querySelectorAll(".illu__card"));
+    const originalCount = originalSlides.length;
+    if (originalCount === 0) return;
 
-      const cards = Array.from(slider.children);
+    // clones antes e depois (infinite loop real)
+    const prependClones = originalSlides.map(s => s.cloneNode(true));
+    const appendClones  = originalSlides.map(s => s.cloneNode(true));
+    prependClones.forEach(c => { c.classList.add("is-clone"); slider.prepend(c); });
+    appendClones.forEach(c => { c.classList.add("is-clone"); slider.append(c); });
 
-      // DUPLICAR slides (início e fim)
-      cards.forEach(card => {
-        const clone = card.cloneNode(true);
-        clone.classList.add("clone");
-        slider.appendChild(clone);
-      });
+    const allSlides = Array.from(slider.querySelectorAll(".illu__card"));
 
-      slider.scrollLeft = slider.scrollWidth / 2;
+    const getSlideWidth = () => allSlides[0].getBoundingClientRect().width;
+    const getGap = () => {
+      const style = getComputedStyle(slider);
+      return parseFloat(style.gap || style.columnGap || "0") || 0;
+    };
 
-      slider.addEventListener("scroll", () => {
-        const maxScroll = slider.scrollWidth;
-        const current = slider.scrollLeft;
+    const centerOn = (el, behavior = "smooth") => {
+      const sliderRect = slider.getBoundingClientRect();
+      const elRect = el.getBoundingClientRect();
+      const delta = (elRect.left + elRect.width / 2) - (sliderRect.left + sliderRect.width / 2);
+      slider.scrollBy({ left: delta, behavior });
+    };
 
-        if (current <= 0) {
-          slider.scrollLeft = maxScroll / 2;
-        }
+    const getClosestToCenter = () => {
+      const sliderRect = slider.getBoundingClientRect();
+      const centerX = sliderRect.left + sliderRect.width / 2;
 
-        if (current >= maxScroll - slider.offsetWidth) {
-          slider.scrollLeft = maxScroll / 2;
-        }
-      });
+      let best = null;
+      let bestDist = Infinity;
 
+      for (const el of allSlides) {
+        const r = el.getBoundingClientRect();
+        const x = r.left + r.width / 2;
+        const d = Math.abs(centerX - x);
+        if (d < bestDist) { bestDist = d; best = el; }
+      }
+      return best;
+    };
+
+    // dots (só originais)
+    const dots = [];
+    if (dotsWrap) {
+      dotsWrap.innerHTML = "";
+      for (let i = 0; i < originalCount; i++) {
+        const b = document.createElement("button");
+        b.type = "button";
+        b.className = "illu__dot";
+        b.setAttribute("aria-label", `Go to slide ${i + 1}`);
+        b.addEventListener("click", () => goToIndex(i));
+        dotsWrap.appendChild(b);
+        dots.push(b);
+      }
     }
+
+    const setActive = () => {
+      const active = getClosestToCenter();
+      allSlides.forEach(s => s.classList.toggle("is-active", s === active));
+
+      if (dots.length && active) {
+        const idx = allSlides.indexOf(active);
+        const mapped = ((idx - originalCount) % originalCount + originalCount) % originalCount;
+        dots.forEach((d, i) => d.classList.toggle("is-active", i === mapped));
+      }
+    };
+
+    const fixInfinite = () => {
+      const unit = getSlideWidth() + getGap();
+      const leftBound  = unit * (originalCount - 1);
+      const rightBound = unit * (originalCount * 2 + 1);
+
+      if (slider.scrollLeft < leftBound) {
+        slider.scrollLeft += unit * originalCount;
+      } else if (slider.scrollLeft > rightBound) {
+        slider.scrollLeft -= unit * originalCount;
+      }
+    };
+
+    const premiumSnap = () => {
+      clearTimeout(premiumSnap.t);
+      premiumSnap.t = setTimeout(() => {
+        const active = getClosestToCenter();
+        if (active) centerOn(active, "smooth");
+      }, 120);
+    };
+
+    const goToIndex = (i) => {
+      // primeiro bloco “original” começa em originalCount
+      const target = allSlides[originalCount + i];
+      if (target) centerOn(target, "smooth");
+    };
+
+    // start no primeiro original
+    const startIndex = originalCount;
+    requestAnimationFrame(() => {
+      slider.scrollLeft = (getSlideWidth() + getGap()) * startIndex;
+      setActive();
+    });
+
+    // scroll handlers
+    let raf = null;
+    slider.addEventListener("scroll", () => {
+      if (raf) cancelAnimationFrame(raf);
+      raf = requestAnimationFrame(() => {
+        fixInfinite();
+        setActive();
+      });
+      premiumSnap();
+    }, { passive: true });
+
+    // arrows
+    const prevBtn = document.querySelector(".illu__arrow--left");
+    const nextBtn = document.querySelector(".illu__arrow--right");
+    const step = (dir) => {
+      const active = getClosestToCenter();
+      if (!active) return;
+      const i = allSlides.indexOf(active);
+      const next = allSlides[i + dir];
+      if (next) centerOn(next, "smooth");
+    };
+    prevBtn?.addEventListener("click", () => step(-1));
+    nextBtn?.addEventListener("click", () => step(+1));
+
+    // keyboard
+    viewport.addEventListener("keydown", (e) => {
+      if (e.key === "ArrowLeft") step(-1);
+      if (e.key === "ArrowRight") step(+1);
+    });
+
+    // drag + pause autoplay when user interacts
+    let isDown = false;
+    let startX = 0;
+    let startLeft = 0;
+    let userInteractedAt = Date.now();
+
+    const pointerDown = (x) => {
+      isDown = true;
+      startX = x;
+      startLeft = slider.scrollLeft;
+      userInteractedAt = Date.now();
+      slider.style.scrollBehavior = "auto";
+    };
+
+    const pointerMove = (x) => {
+      if (!isDown) return;
+      const walk = (startX - x) * 1.1;
+      slider.scrollLeft = startLeft + walk;
+      userInteractedAt = Date.now();
+    };
+
+    const pointerUp = () => {
+      if (!isDown) return;
+      isDown = false;
+      slider.style.scrollBehavior = "smooth";
+      premiumSnap();
+    };
+
+    slider.addEventListener("mousedown", (e) => pointerDown(e.pageX));
+    window.addEventListener("mousemove", (e) => pointerMove(e.pageX));
+    window.addEventListener("mouseup", pointerUp);
+
+    slider.addEventListener("touchstart", (e) => pointerDown(e.touches[0].pageX), { passive: true });
+    slider.addEventListener("touchmove", (e) => pointerMove(e.touches[0].pageX), { passive: true });
+    slider.addEventListener("touchend", pointerUp);
+
+    // autoplay
+    let autoplay = true;
+    const autoplayTick = () => {
+      if (!autoplay) return;
+      const now = Date.now();
+      const recentlyInteracted = (now - userInteractedAt) < 2500;
+      if (!recentlyInteracted && !isDown) step(+1);
+      setTimeout(autoplayTick, 4200);
+    };
+    autoplayTick();
+
+    document.addEventListener("visibilitychange", () => {
+      autoplay = !document.hidden;
+    });
+
+    // initial state
+    setActive();
+  })();
   </script>
-  
+
 </body>
 </html>
