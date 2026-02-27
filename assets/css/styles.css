@@ -756,3 +756,64 @@ body {
   }
 
 }
+
+/* =========================
+   HERO FLOWERS LAYERING
+   ========================= */
+
+.hero-art{
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.hero-art .home__blob{
+  position: relative;
+  z-index: 2;
+}
+
+.hero-flower{
+  position: absolute;
+  width: 150px;
+  height: auto;
+  pointer-events: none;
+  user-select: none;
+}
+
+/* Flor atrás */
+.hero-flower--back{
+  z-index: 1;
+  left: -40px;
+  top: 60px;
+  transform: rotate(-15deg);
+  opacity: 0.95;
+}
+
+/* Flor à frente */
+.hero-flower--front{
+  z-index: 3;
+  right: -20px;
+  top: 230px;
+  transform: rotate(20deg);
+  opacity: 0.95;
+}
+
+/* MOBILE ajustes */
+@media screen and (max-width: 768px){
+
+  .hero-flower{
+    width: 110px;
+  }
+
+  .hero-flower--back{
+    left: -15px;
+    top: 40px;
+  }
+
+  .hero-flower--front{
+    right: -10px;
+    top: 190px;
+  }
+
+}
