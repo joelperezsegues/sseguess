@@ -475,7 +475,7 @@ body {
   font-size: var(--normal-font-size);
   color: var(--second-color);
 
-  background-image: url("../img/fondo.png");
+  background-image: url("/sseguess/images/backgrounds/.png");
   background-size: cover;       /* makes it fill the screen */
   background-position: center;  /* centers it nicely */
   background-repeat: no-repeat;
@@ -573,7 +573,7 @@ body {
   color: #2a2a2a;
 
   /* IMAGEM DE FUNDO */
-  background: url("../img/fondo.png") center / cover no-repeat fixed;
+  background: url("/sseguess/images/backgrounds/.png") center / cover no-repeat fixed;
 }
 
 /* HEADER */
@@ -739,4 +739,19 @@ body {
 .portfolio__overlay h3 {
   margin: 0;
   font-size: 1.5rem;
+}
+
+/* =========================
+   MOBILE PORTFOLIO MARGINS
+   ========================= */
+@media screen and (max-width: 768px) {
+
+  .portfolio__container {
+    padding: 0 1.5rem;  /* margem lateral */
+  }
+
+  .portfolio__card {
+    height: 280px; /* ligeiramente menor no mobile */
+  }
+
 }
